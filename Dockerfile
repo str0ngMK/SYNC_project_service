@@ -1,12 +1,14 @@
 FROM openjdk:17-slim
 
-# Set working directory
+# wget과 unzip 설치
+RUN apt-get update && apt-get install -y wget unzip
+
 WORKDIR /app
 
-# Copy the project files to the container
+# 소스 코드 복사
 COPY . /app
 
-# Download the Gradle wrapper manually
+# Gradle 다운로드 및 압축 해제
 RUN wget https://services.gradle.org/distributions/gradle-8.8-bin.zip -P /app
 RUN unzip /app/gradle-8.8-bin.zip -d /app
 
