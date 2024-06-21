@@ -1,19 +1,17 @@
 FROM openjdk:17-slim
 
-# wget과 unzip 설치
-RUN apt-get update && apt-get install -y wget unzip
+# Java 환경 변수 설정
+ENV JAVA_HOME /usr/local/openjdk-17
+ENV PATH $PATH:$JAVA_HOME/bin
 
 WORKDIR /app
 
-# 소스 코드 복사
+# 현재 디렉토리의 모든 파일을 컨테이너의 /app 디렉토리에 복사
 COPY . /app
 
-# Gradle 다운로드 및 압축 해제
-RUN wget https://services.gradle.org/distributions/gradle-8.8-bin.zip -P /app
-RUN unzip /app/gradle-8.8-bin.zip -d /app
+# 로컬에서 다운로드한 Gradle 캐시를 Docker 이미지에 복사
+COPY .gradle /root/.gradle
 
-# Set the executable permission for the Gradle wrapper
+# gradlew 파일에 실행 권한 추가
 RUN chmod +x ./gradlew
 
-# Continue with the build process
-RUN ./gradlew --no-daemon wrapper
