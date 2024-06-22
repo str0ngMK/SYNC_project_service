@@ -1,20 +1,30 @@
+# Start with a base image containing Java runtime
 FROM openjdk:17-slim
 
-# Java 환경 변수 설정
-ENV JAVA_HOME /usr/local/openjdk-17
-ENV PATH $PATH:$JAVA_HOME/bin
-
+# Set the working directory in the image to /app
 WORKDIR /app
 
-# 현재 디렉토리의 모든 파일을 컨테이너의 /app 디렉토리에 복사
+# Copy the current directory contents into the container at /app
 COPY . /app
 
+# Set environment variables for Gradle
+ENV GRADLE_HOME /root/gradle-8.8-bin.zip
+ENV GRADLE_VERSION 8.8
+ENV PATH $PATH:$GRADLE_HOME/bin
 
-# gradlew 파일에 실행 권한 추가
+# Install Gradle
+RUN apt-get update && \
+    apt-get install -y wget unzip && \
+    wget https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -P /tmp && \
+    unzip -d /root /tmp/gradle-${GRADLE_VERSION}-bin.zip && \
+    ln -s /root/gradle-${GRADLE_VERSION} /root/gradle && \
+    rm /tmp/gradle-${GRADLE_VERSION}-bin.zip
+
+# Give execution rights on the gradlew file
 RUN chmod +x ./gradlew
 
-# 애플리케이션이 사용할 포트
+# Expose port 8090 to the outside world
 EXPOSE 8090
 
-# 컨테이너 시작 시 실행할 명령어
+# Run the application
 CMD ["./gradlew", "bootRun"]
