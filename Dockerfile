@@ -4,6 +4,9 @@ FROM openjdk:11-jdk-slim
 # 작업 디렉토리 설정
 WORKDIR /app
 
+# unzip 패키지 설치
+RUN apt-get update && apt-get install -y unzip
+
 # 빌드 인자 선언
 ARG GRADLE_ZIP
 
