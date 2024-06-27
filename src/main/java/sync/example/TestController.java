@@ -20,6 +20,6 @@ public class TestController {
     public ResponseEntity<String> responseTest() {
         loadBalanceCount += 1;
         log.info("loadBalanceCount : " + loadBalanceCount);
-        return ResponseEntity.ok("Hello spring boot!!!!!");
+        return ResponseEntity.ok("Hello spring boot!!!!!!");
     }
 }
