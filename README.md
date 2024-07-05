@@ -1,1 +1,0 @@
-# SYNC_project_service
