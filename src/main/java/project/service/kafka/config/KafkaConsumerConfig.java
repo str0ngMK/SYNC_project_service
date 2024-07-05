@@ -14,6 +14,7 @@ import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
+import project.service.kafka.event.ProjectCreateEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +23,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class KafkaConsumerConfig {
 	private final ApplicationConfig applicationConfig;
-	//ConsumerFactory<String, String> consumerFactory
 	@Bean
 	public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory() {
 		Map<String, Object> consumerProps = new HashMap<>();
@@ -32,6 +32,7 @@ public class KafkaConsumerConfig {
 		consumerProps.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, StringDeserializer.class.getName());
 		consumerProps.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JsonDeserializer.class.getName());
 		consumerProps.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
+		consumerProps.put(JsonDeserializer.VALUE_DEFAULT_TYPE, ProjectCreateEvent.class.getName());
 
 		ConsumerFactory<String, String> consumerFactory = new DefaultKafkaConsumerFactory<>(consumerProps);
 

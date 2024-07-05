@@ -2,6 +2,7 @@ package project.service.kafka;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 import project.service.ProjectService;
 import project.service.dto.request.CreateProjectRequestDto;
@@ -14,10 +15,9 @@ import project.service.kafka.event.ProjectCreateEvent;
 public class KafkaConsumerService {
     private final ProjectService projectService;
     private static final String TOPIC = "project-create-topic";
-    @KafkaListener(topics = TOPIC, groupId = "project_create_group")
+    @KafkaListener(topics = TOPIC, groupId = "project_create_group", containerFactory = "kafkaListenerContainerFactory")
     public void listenProjectCreateEvent(ProjectCreateEvent event) {
         try {
-            // JSON 문자열을 ProjectCreateEvent 객체로 변환
             CreateProjectRequestDto projectCreateRequestDto = event.getProjectCreateRequestDto();
             String userId = event.getUserId();
             // 이벤트 처리

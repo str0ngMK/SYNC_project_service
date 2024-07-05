@@ -1,4 +1,4 @@
-package user.service.global.config;
+package project.service.kafka.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

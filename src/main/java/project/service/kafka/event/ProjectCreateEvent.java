@@ -9,4 +9,5 @@ import project.service.dto.request.CreateProjectRequestDto;
 public class ProjectCreateEvent {
     private CreateProjectRequestDto projectCreateRequestDto;
     private String userId;
+
 }

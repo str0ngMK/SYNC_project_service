@@ -1,6 +1,5 @@
 package project.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,10 +7,6 @@ import project.service.dto.request.CreateProjectRequestDto;
 import project.service.entity.Project;
 import project.service.kafka.KafkaProducerService;
 import project.service.repository.ProjectRepository;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +22,6 @@ public class ProjectService {
 				.endDate(projectCreateRequestDto.getEndDate())
 				.title(projectCreateRequestDto.getTitle()).build();
 		projectRepository.save(project);
-		kafkaProducerService.sendCreateMemberAtProjectEvent(userId, project.getId());
 //		MemberMappingToProjectRequestDto memberMappingToProjectRequestDto = MemberMappingToProjectRequestDto.builder()
 //				.projectId(project.getId()).userId(userService.getCurrentUserId()).isManager(true).build();
 //		memberService.memberAddToProject(memberMappingToProjectRequestDto);
