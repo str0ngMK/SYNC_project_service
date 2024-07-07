@@ -1,10 +1,12 @@
 package project.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.service.dto.request.CreateProjectRequestDto;
 import project.service.entity.Project;
+import project.service.global.ResponseMessage;
 import project.service.kafka.KafkaProducerService;
 import project.service.repository.ProjectRepository;
 
@@ -31,9 +33,19 @@ public class ProjectService {
 //
 //		// 초대 URL 생성
 //		inviteService.createLink(project);
+	}
+	@Transactional(rollbackFor = { Exception.class })
+	public ResponseMessage findProject(Long projectId) {
+		try {
+			Project project = projectRepository.findById(projectId).orElseThrow(() -> new EntityNotFoundException(String.valueOf(projectId)));
+			// 프로젝트를 찾았을 때의 로직을 여기에 추가하세요.
+			// 예를 들어, 성공 메시지를 반환할 수 있습니다.
+			return new ResponseMessage("프로젝트 조회 성공", true, project.getId());
+		} catch (EntityNotFoundException e) {
+			return new ResponseMessage("해당 프로젝트는 존재하지 않습니다.", false, e.getMessage());
+		}
 
 	}
-
 //	@Transactional(rollbackFor = { Exception.class })
 //	public ResponseMessage getProjects(GetProjectsRequestDto getProjectsRequestDto) {
 //		List<GetProjectsResponseDto> result;
