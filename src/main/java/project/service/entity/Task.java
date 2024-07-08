@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@jakarta.persistence.Entity
+@Entity
 @Table(name = "task")
 public class Task {
     @Id
@@ -24,7 +24,7 @@ public class Task {
     private Date startDate;
     @Column(name = "end_date")
     private Date endDate;
-    private Boolean status;
+    private int status;
     @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;
@@ -34,5 +34,4 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "parent_task_id")
     private Task parentTask;
-
 }

@@ -8,8 +8,10 @@ import project.service.ProjectService;
 import project.service.TaskService;
 import project.service.dto.request.CreateProjectRequestDto;
 import project.service.dto.request.CreateTaskRequestDto;
+import project.service.dto.request.MemberMappingToTaskRequestDto;
 import project.service.kafka.event.ProjectCreateEvent;
 import project.service.kafka.event.TaskCreateEvent;
+import project.service.kafka.event.UserAddToTaskEvent;
 
 
 @Service
@@ -20,6 +22,7 @@ public class KafkaConsumerService {
     private final TaskService taskService;
     private static final String TOPIC = "project-create-topic";
     private static final String TOPIC1 = "task-create-topic";
+    private static final String TOPIC2 = "task-add-user-topic";
     @KafkaListener(topics = TOPIC, groupId = "project_create_group", containerFactory = "kafkaProjectCreateEventListenerContainerFactory")
     public void listenProjectCreateEvent(ProjectCreateEvent event) {
         try {
@@ -41,6 +44,17 @@ public class KafkaConsumerService {
             taskService.createTask(createTaskRequestDto);
             // 처리 로그 출력
             log.info("Processed TaskCreateEvent");
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+    }
+    @KafkaListener(topics = TOPIC2, groupId = "task-add-user-group", containerFactory = "kafkaAddUserToTaskEventListenerContainerFactory")
+    public void listenAddUserToTaskEvent(UserAddToTaskEvent event) {
+        try {
+            // 이벤트 처리
+            taskService.addUserToTask(event);
+            // 처리 로그 출력
+            log.info("Processed addUserToTaskEvent");
         } catch (Exception e) {
             log.error(e.getMessage());
         }

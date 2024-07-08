@@ -44,7 +44,6 @@ public class ProjectService {
 		} catch (EntityNotFoundException e) {
 			return new ResponseMessage("해당 프로젝트는 존재하지 않습니다.", false, e.getMessage());
 		}
-
 	}
 //	@Transactional(rollbackFor = { Exception.class })
 //	public ResponseMessage getProjects(GetProjectsRequestDto getProjectsRequestDto) {
