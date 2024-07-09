@@ -34,4 +34,6 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "parent_task_id")
     private Task parentTask;
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserTask> userTasks = new ArrayList<>();
 }

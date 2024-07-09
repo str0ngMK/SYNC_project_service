@@ -2,7 +2,10 @@ package project.service.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,4 +26,7 @@ public class Project{
     private Date startDate;
     @Column(name = "end_date")
     private Date endDate;
+    // Add this for the one-to-many relationship with Task
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Task> tasks = new ArrayList<>();
 }

@@ -2,21 +2,25 @@ package project.service.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import project.service.ProjectService;
+import project.service.dto.request.GetProjectsRequestDto;
+import project.service.dto.response.GetProjectsResponseDto;
 import project.service.global.ResponseMessage;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/project/api/v1")
 @RequiredArgsConstructor
 @Slf4j
 public class ProjectController {
     final ProjectService projectService;
-    @PostMapping("/find")
+    @PostMapping("/project/api/v1/find")
     public ResponseMessage findProject(Long projectId)  {
         return projectService.findProject(projectId);
+    }
+    @PostMapping("/project/api/v1/get")
+    public List<GetProjectsResponseDto> getProjects(@RequestBody GetProjectsRequestDto getProjectsRequestDto)  {
+        return projectService.getProjects(getProjectsRequestDto);
     }
 }
