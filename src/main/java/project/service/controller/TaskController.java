@@ -12,7 +12,7 @@ import project.service.global.ResponseMessage;
 @Slf4j
 public class TaskController {
     private final TaskService taskService;
-    @GetMapping("/tasks/api/v1/getChildren")
+    @GetMapping("project/tasks/api/v1/getChildren")
     public ResponseMessage getOnlyChildrenTasks(Long taskId)  {
         return taskService.getOnlyChildrenTasks(taskId);
     }
