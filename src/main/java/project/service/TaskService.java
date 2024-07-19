@@ -12,6 +12,7 @@ import project.service.entity.Task;
 import project.service.entity.UserTask;
 import project.service.entity.UserTaskId;
 import project.service.global.ResponseMessage;
+import project.service.kafka.event.ProjectUpdateEvent;
 import project.service.kafka.event.TaskDeleteEvent;
 import project.service.kafka.event.UserAddToTaskEvent;
 import project.service.repository.ProjectRepository;
@@ -83,5 +84,8 @@ public class TaskService {
         Optional<Task> task = taskRepository.findById(event.getTaskId());
         //task id 존재하지 않는경우 예외처리 해야함 (추가)
         taskRepository.delete(task.get());
+    }
+
+    public void updateTask(ProjectUpdateEvent event) {
     }
 }

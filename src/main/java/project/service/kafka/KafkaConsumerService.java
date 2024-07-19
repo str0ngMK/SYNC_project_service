@@ -22,6 +22,7 @@ public class KafkaConsumerService {
     private static final String TOPIC3 = "task-delete-topic";
     private static final String TOPIC4 = "project-delete-topic";
     private static final String TOPIC5 = "project-update-topic";
+    private static final String TOPIC6 = "task-update-topic";
     @KafkaListener(topics = TOPIC, groupId = "project_create_group", containerFactory = "kafkaProjectCreateEventListenerContainerFactory")
     public void listenProjectCreateEvent(ProjectCreateEvent event) {
         try {
@@ -86,7 +87,18 @@ public class KafkaConsumerService {
             // 이벤트 처리
             projectService.updateProject(event);
             // 처리 로그 출력
-            log.info("Processed projectDeleteEvent");
+            log.info("Processed projectUpdateEvent");
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+    }
+    @KafkaListener(topics = TOPIC6, groupId = "task-update-group", containerFactory = "kafkaTaskUpdateEventListenerContainerFactory")
+    public void listenTaskUpdateEventEvent(ProjectUpdateEvent event) {
+        try {
+            // 이벤트 처리
+            taskService.updateTask(event);
+            // 처리 로그 출력
+            log.info("Processed taskUpdateEvent");
         } catch (Exception e) {
             log.error(e.getMessage());
         }
