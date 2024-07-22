@@ -93,7 +93,7 @@ public class KafkaConsumerService {
         }
     }
     @KafkaListener(topics = TOPIC6, groupId = "task-update-group", containerFactory = "kafkaTaskUpdateEventListenerContainerFactory")
-    public void listenTaskUpdateEventEvent(ProjectUpdateEvent event) {
+    public void listenTaskUpdateEventEvent(TaskUpdateEvent event) {
         try {
             // 이벤트 처리
             taskService.updateTask(event);
