@@ -29,5 +29,5 @@ public class Project{
     // Add this for the one-to-many relationship with Task
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks = new ArrayList<>();
-    private int depth;
+
 }

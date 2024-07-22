@@ -25,6 +25,7 @@ public class Task {
     @Column(name = "end_date")
     private Date endDate;
     private int status;
+    private int depth;
     @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;

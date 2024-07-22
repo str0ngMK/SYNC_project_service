@@ -6,6 +6,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.service.dto.request.CreateTaskRequestDto;
+import project.service.dto.request.UpdateProjectRequestDto;
 import project.service.dto.response.GetTaskResponseDto;
 import project.service.entity.Project;
 import project.service.entity.Task;
@@ -14,6 +15,7 @@ import project.service.entity.UserTaskId;
 import project.service.global.ResponseMessage;
 import project.service.kafka.event.ProjectUpdateEvent;
 import project.service.kafka.event.TaskDeleteEvent;
+import project.service.kafka.event.TaskUpdateEvent;
 import project.service.kafka.event.UserAddToTaskEvent;
 import project.service.repository.ProjectRepository;
 import project.service.repository.TaskRepository;
@@ -86,6 +88,7 @@ public class TaskService {
         taskRepository.delete(task.get());
     }
 
-    public void updateTask(ProjectUpdateEvent event) {
+    public void updateTask(TaskUpdateEvent event) {
+
     }
 }
