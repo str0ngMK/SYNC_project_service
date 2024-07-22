@@ -36,13 +36,22 @@ public class TaskService {
         //project id 존재하지 않는경우 예외처리 해야함 (추가)
         Optional<Task> parentTask = taskRepository.findById(createTaskRequestDto.getParentTaskId());
         Task task;
+
         if (parentTask.isPresent()) {
+            if (parentTask.get().getDepth() == 2) {
+                throw new IllegalArgumentException("Parent task cannot have a depth of 2.");
+            }
             task = Task.builder().title(createTaskRequestDto.getTitle())
-                    .description(createTaskRequestDto.getDescription()).parentTask(parentTask.get())
-                    .endDate(createTaskRequestDto.getEndDate()).startDate(createTaskRequestDto.getStartDate())
-                    .status(createTaskRequestDto.getStatus()).project(project.get()).build();
+                    .description(createTaskRequestDto.getDescription())
+                    .parentTask(parentTask.get())
+                    .depth(parentTask.get().getDepth() + 1)
+                    .endDate(createTaskRequestDto.getEndDate())
+                    .startDate(createTaskRequestDto.getStartDate())
+                    .status(createTaskRequestDto.getStatus())
+                    .project(project.get()).build();
         } else {
             task = Task.builder().title(createTaskRequestDto.getTitle())
+                    .depth(0)
                     .description(createTaskRequestDto.getDescription()).endDate(createTaskRequestDto.getEndDate())
                     .startDate(createTaskRequestDto.getStartDate()).status(createTaskRequestDto.getStatus())
                     .project(project.get()).build();
@@ -91,4 +100,7 @@ public class TaskService {
     public void updateTask(TaskUpdateEvent event) {
 
     }
+
+//    public ResponseMessage getUser(Long taskId) {
+//    }
 }
