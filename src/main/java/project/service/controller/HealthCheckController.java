@@ -11,13 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/project/api/v1")
 @RequiredArgsConstructor
 @Slf4j
-public class TestController {
-    int loadBalanceCount = 0;
-    // existing code...
+public class HealthCheckController {
     @GetMapping("/test")
     public ResponseEntity<String> responseTest() {
-        loadBalanceCount += 1;
-        log.info("loadBalanceCount : " + loadBalanceCount);
-        return ResponseEntity.ok("Hello spring boot!!!!!!!!!!!");
+        return ResponseEntity.ok("health checking..");
     }
 }
