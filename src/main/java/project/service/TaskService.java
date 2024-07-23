@@ -22,6 +22,7 @@ import project.service.repository.TaskRepository;
 import project.service.repository.UserTaskRepository;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -101,6 +102,21 @@ public class TaskService {
 
     }
 
-//    public ResponseMessage getUser(Long taskId) {
-//    }
+    public ResponseMessage getUserIdsFromTask(Long taskId) {
+        List<UserTask> userTasks = userTaskRepository.findByTaskId(taskId);
+        if (userTasks.isEmpty()) {
+            return ResponseMessage.builder()
+                    .result(false)
+                    .message("해당 업무에는 배정된 담당자가 없습니다.")
+                    .build();
+        }
+        List<Long> userIds = userTasks.stream()
+                .map(userTask -> userTask.getId().getUserId())
+                .collect(Collectors.toList());
+        return ResponseMessage.builder()
+                .result(true)
+                .value(userIds)
+                .build();
+    }
+
 }
