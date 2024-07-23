@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.service.dto.request.CreateTaskRequestDto;
 import project.service.dto.request.UpdateProjectRequestDto;
+import project.service.dto.response.GetMemberFromTaskResponseDto;
 import project.service.dto.response.GetTaskResponseDto;
 import project.service.entity.Project;
 import project.service.entity.Task;
@@ -104,19 +105,20 @@ public class TaskService {
 
     public ResponseMessage getUserIdsFromTask(Long taskId) {
         List<UserTask> userTasks = userTaskRepository.findByTaskId(taskId);
+        GetMemberFromTaskResponseDto result = GetMemberFromTaskResponseDto.builder()
+            .userIds(userTasks.stream()
+                .map(userTask -> userTask.getId().getUserId())
+                .collect(Collectors.toList()))
+            .build();
         if (userTasks.isEmpty()) {
             return ResponseMessage.builder()
-                    .result(false)
-                    .message("해당 업무에는 배정된 담당자가 없습니다.")
-                    .build();
-        }
-        List<Long> userIds = userTasks.stream()
-                .map(userTask -> userTask.getId().getUserId())
-                .collect(Collectors.toList());
-        return ResponseMessage.builder()
-                .result(true)
-                .value(userIds)
+                .result(false)
+                .message("해당 업무에는 배정된 담당자가 없습니다.")
                 .build();
+        }
+        return ResponseMessage.builder()
+            .result(true)
+            .value(result)
+            .build();
     }
-
 }
