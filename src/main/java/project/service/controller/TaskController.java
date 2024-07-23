@@ -16,10 +16,10 @@ public class TaskController {
     public ResponseMessage getOnlyChildrenTasks(Long taskId)  {
         return taskService.getOnlyChildrenTasks(taskId);
     }
-//    @GetMapping("project/task/user")
-//    public ResponseMessage getUserFromTask(Long taskId)  {
-//
-//        return taskService.getUser(taskId);
-//    }
+    @GetMapping("task/user")
+    public ResponseMessage getUserFromTask(Long taskId)  {
+
+        return taskService.getUserIdsFromTask(taskId);
+    }
 
 }
