@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.service.TaskService;
+import project.service.dto.request.GetMemberFromTaskRequestDto;
 import project.service.global.ResponseMessage;
 
 @RestController
@@ -16,10 +17,9 @@ public class TaskController {
     public ResponseMessage getOnlyChildrenTasks(Long taskId)  {
         return taskService.getOnlyChildrenTasks(taskId);
     }
-    @GetMapping("task/user")
-    public ResponseMessage getUserFromTask(Long taskId)  {
-
-        return taskService.getUserIdsFromTask(taskId);
+    @GetMapping("/project/task/api/v1/users")
+    public ResponseMessage getUserFromTask(GetMemberFromTaskRequestDto getMemberFromTaskRequestDto)  {
+        return taskService.getUserIdsFromTask(getMemberFromTaskRequestDto.getTaskId());
     }
 
 }
