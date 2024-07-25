@@ -19,8 +19,12 @@ public class ProjectController {
     public ResponseMessage findProject(Long projectId)  {
         return projectService.findProject(projectId);
     }
-    @PostMapping("/project/api/v1/get")
-    public List<GetProjectsResponseDto> getProjects(@RequestBody GetProjectsRequestDto getProjectsRequestDto)  {
-        return projectService.getProjects(getProjectsRequestDto);
+//    @PostMapping("/project/api/v1/get")
+//    public List<GetProjectsResponseDto> getProjects(@RequestBody GetProjectsRequestDto getProjectsRequestDto)  {
+//        return projectService.getProjects(getProjectsRequestDto);
+//    }
+    @GetMapping("/project/api/v1")
+    public ResponseMessage getProjects(@RequestParam List<Long> projectIds)  {
+        return projectService.getProjects(projectIds);
     }
 }

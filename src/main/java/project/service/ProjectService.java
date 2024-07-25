@@ -49,8 +49,8 @@ public class ProjectService {
 		projectRepository.delete(project.get());
     }
 	@Transactional(rollbackFor = { Exception.class })
-	public List<GetProjectsResponseDto> getProjects(GetProjectsRequestDto getProjectsRequestDto) {
-		List<GetProjectsResponseDto> result = getProjectsRequestDto.getProjectIds().stream()
+	public ResponseMessage getProjects(List<Long> projectIds) {
+		List<GetProjectsResponseDto> result = projectIds.stream()
 				.map(projectRepository::findById)
 				.filter(Optional::isPresent)
 				.map(Optional::get)
@@ -61,7 +61,7 @@ public class ProjectService {
 						project.getStartDate(),
 						project.getEndDate()))
 				.collect(Collectors.toList());
-		return result;
+		return new ResponseMessage("프로젝트 조회 완료", true, result);
 	}
 	@Transactional(rollbackFor = { Exception.class })
 	public void updateProject(ProjectUpdateEvent event) {
