@@ -14,7 +14,8 @@ public class KafkaProducerService {
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private static final String TOPIC = "member-add-to-project-topic";
 
-    public void sendAddMemberToProjectEvent(ProjectCreateEvent event) {
+    public void sendAddMemberToProjectEvent(String userId, Long projectId) {
+        UserAddToProjectEvent event = new UserAddToProjectEvent(projectId, userId);
         ProducerRecord<String, Object> record = new ProducerRecord<>(TOPIC, event);
         record.headers().remove("spring.json.header.types");
         kafkaTemplate.send(record);
