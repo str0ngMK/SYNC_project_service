@@ -32,7 +32,8 @@ public class KafkaConsumerService {
             String userId = event.getUserId();
             // 이벤트 처리
             Project project = projectService.createProject(projectCreateRequestDto);
-            kafkaProducerService.sendAddMemberToProjectEvent(event);
+            log.warn("project.getId() : " + project.getId());
+            kafkaProducerService.sendAddMemberToProjectEvent(userId ,project.getId());
 
             // 처리 로그 출력
             log.info("Processed ProjectCreateEvent for userId: " + userId);

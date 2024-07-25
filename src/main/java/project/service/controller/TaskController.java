@@ -1,5 +1,6 @@
 package project.service.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +20,7 @@ public class TaskController {
         return taskService.getOnlyChildrenTasks(taskId);
     }
     @GetMapping("/project/task/api/v1/users")
-    public ResponseMessage getUserFromTask(@RequestBody GetMemberFromTaskRequestDto getMemberFromTaskRequestDto)  {
+    public ResponseMessage getUserFromTask(@RequestBody @Valid GetMemberFromTaskRequestDto getMemberFromTaskRequestDto)  {
         return taskService.getUserIdsFromTask(getMemberFromTaskRequestDto.getTaskId());
     }
 
