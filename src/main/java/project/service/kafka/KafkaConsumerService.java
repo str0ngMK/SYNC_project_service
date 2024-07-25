@@ -7,6 +7,7 @@ import project.service.ProjectService;
 import project.service.TaskService;
 import project.service.dto.request.CreateProjectRequestDto;
 import project.service.dto.request.CreateTaskRequestDto;
+import project.service.entity.Project;
 import project.service.kafka.event.*;
 
 
@@ -16,6 +17,7 @@ import project.service.kafka.event.*;
 public class KafkaConsumerService {
     private final ProjectService projectService;
     private final TaskService taskService;
+    private final KafkaProducerService kafkaProducerService;
     private static final String TOPIC = "project-create-topic";
     private static final String TOPIC1 = "task-create-topic";
     private static final String TOPIC2 = "task-add-user-topic";
@@ -29,7 +31,9 @@ public class KafkaConsumerService {
             CreateProjectRequestDto projectCreateRequestDto = event.getProjectCreateRequestDto();
             String userId = event.getUserId();
             // 이벤트 처리
-            projectService.createProject(projectCreateRequestDto);
+            Project project = projectService.createProject(projectCreateRequestDto);
+            kafkaProducerService.sendAddMemberToProjectEvent(project.getId(), userId);
+
             // 처리 로그 출력
             log.info("Processed ProjectCreateEvent for userId: " + userId);
         } catch (Exception e) {
