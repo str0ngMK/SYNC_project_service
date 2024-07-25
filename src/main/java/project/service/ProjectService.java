@@ -23,14 +23,14 @@ import java.util.stream.Collectors;
 public class ProjectService {
 	private final ProjectRepository projectRepository;
 	@Transactional(rollbackFor = { Exception.class })
-	public void createProject(CreateProjectRequestDto projectCreateRequestDto) {
+	public Project createProject(CreateProjectRequestDto projectCreateRequestDto) {
 		Project project = Project.builder()
 				.description(projectCreateRequestDto.getDescription())
 				.subTitle(projectCreateRequestDto.getSubTitle())
 				.startDate(projectCreateRequestDto.getStartDate())
 				.endDate(projectCreateRequestDto.getEndDate())
 				.title(projectCreateRequestDto.getTitle()).build();
-		projectRepository.save(project);
+		return projectRepository.save(project);
 	}
 	@Transactional(rollbackFor = { Exception.class })
 	public ResponseMessage findProject(Long projectId) {
