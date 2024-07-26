@@ -12,5 +12,5 @@ public class GetProjectsResponseDto {
     private String description;
     private Date startDate;
     private Date endDate;
-
+    private Float progress;
 }

@@ -13,6 +13,7 @@ import project.service.global.ResponseMessage;
 import project.service.kafka.event.ProjectDeleteEvent;
 import project.service.kafka.event.ProjectUpdateEvent;
 import project.service.repository.ProjectRepository;
+import project.service.repository.TaskRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProjectService {
 	private final ProjectRepository projectRepository;
+private final TaskRepository taskRepository;
 	@Transactional(rollbackFor = { Exception.class })
 	public Project createProject(CreateProjectRequestDto projectCreateRequestDto) {
 		Project project = Project.builder()
@@ -54,12 +56,19 @@ public class ProjectService {
 				.map(projectRepository::findById)
 				.filter(Optional::isPresent)
 				.map(Optional::get)
-				.map(project -> new GetProjectsResponseDto(
-						project.getId(),
-						project.getTitle(),
-						project.getDescription(),
-						project.getStartDate(),
-						project.getEndDate()))
+				.map(project -> {
+					int totalTasks = taskRepository.countByProjectIdAndDepth(project.getId());
+					int completedTasks = taskRepository.countByProjectIdAndDepthAndStatus(project.getId());
+					float progress = totalTasks > 0 ? (float) completedTasks / totalTasks : 0;
+					return new GetProjectsResponseDto(
+							project.getId(),
+							project.getTitle(),
+							project.getDescription(),
+							project.getStartDate(),
+							project.getEndDate(),
+							progress
+					);
+				})
 				.collect(Collectors.toList());
 		return new ResponseMessage("프로젝트 조회 완료", true, result);
 	}
