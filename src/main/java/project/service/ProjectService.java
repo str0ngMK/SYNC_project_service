@@ -1,11 +1,9 @@
 package project.service;
-
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.service.dto.request.CreateProjectRequestDto;
-import project.service.dto.request.GetProjectsRequestDto;
 import project.service.dto.request.UpdateProjectRequestDto;
 import project.service.dto.response.GetProjectsResponseDto;
 import project.service.entity.Project;
@@ -14,7 +12,6 @@ import project.service.kafka.event.ProjectDeleteEvent;
 import project.service.kafka.event.ProjectUpdateEvent;
 import project.service.repository.ProjectRepository;
 import project.service.repository.TaskRepository;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,7 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProjectService {
 	private final ProjectRepository projectRepository;
-private final TaskRepository taskRepository;
+	private final TaskRepository taskRepository;
 	@Transactional(rollbackFor = { Exception.class })
 	public Project createProject(CreateProjectRequestDto projectCreateRequestDto) {
 		Project project = Project.builder()
