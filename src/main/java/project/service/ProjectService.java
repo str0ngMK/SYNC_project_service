@@ -57,16 +57,16 @@ private final TaskRepository taskRepository;
 				.filter(Optional::isPresent)
 				.map(Optional::get)
 				.map(project -> {
-					int totalTasks = taskRepository.countByProjectIdAndDepth(project.getId());
-					int completedTasks = taskRepository.countByProjectIdAndDepthAndStatus(project.getId());
-					float progress = totalTasks > 0 ? (float) completedTasks / totalTasks : 0;
+//					int totalTasks = taskRepository.countByProjectIdAndDepth(project.getId());
+//					int completedTasks = taskRepository.countByProjectIdAndDepthAndStatus(project.getId());
+//					float progress = totalTasks > 0 ? (float) completedTasks / totalTasks : 0;
 					return new GetProjectsResponseDto(
 							project.getId(),
 							project.getTitle(),
 							project.getDescription(),
 							project.getStartDate(),
 							project.getEndDate(),
-							progress
+							0f
 					);
 				})
 				.collect(Collectors.toList());
