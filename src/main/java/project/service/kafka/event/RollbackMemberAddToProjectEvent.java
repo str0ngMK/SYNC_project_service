@@ -1,11 +1,11 @@
 package project.service.kafka.event;
 
 import lombok.AllArgsConstructor;
-import lombok.Setter;
+import lombok.Getter;
 
 import java.util.List;
 
-@Setter
+@Getter
 @AllArgsConstructor
 public class RollbackMemberAddToProjectEvent {
 
