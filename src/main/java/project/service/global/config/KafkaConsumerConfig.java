@@ -23,8 +23,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class KafkaConsumerConfig {
 	private final ApplicationConfig applicationConfig;
-	@Bean
-	public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaProjectCreateEventListenerContainerFactory() {
+	private Map<String, Object> commonConsumerProps(String valueType) {
 		Map<String, Object> consumerProps = new HashMap<>();
 		consumerProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, applicationConfig.getKafkaHost());
 		consumerProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
@@ -32,129 +31,49 @@ public class KafkaConsumerConfig {
 		consumerProps.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, StringDeserializer.class.getName());
 		consumerProps.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JsonDeserializer.class.getName());
 		consumerProps.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
-		consumerProps.put(JsonDeserializer.VALUE_DEFAULT_TYPE, ProjectCreateEvent.class.getName());
-
+		consumerProps.put(JsonDeserializer.VALUE_DEFAULT_TYPE, valueType);
+		return consumerProps;
+	}
+	private KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> createFactory(String valueType) {
+		Map<String, Object> consumerProps = commonConsumerProps(valueType);
 		ConsumerFactory<String, String> consumerFactory = new DefaultKafkaConsumerFactory<>(consumerProps);
-
 		ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
 		factory.setConsumerFactory(consumerFactory);
 		factory.getContainerProperties().setGroupId("console-consumer-" + System.currentTimeMillis());
 		factory.setConcurrency(3);
 		return factory;
+	}
+	@Bean
+	public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaProjectCreateEventListenerContainerFactory() {
+		return createFactory(ProjectCreateEvent.class.getName());
 	}
 	@Bean
 	public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaTaskCreateEventListenerContainerFactory() {
-		Map<String, Object> consumerProps = new HashMap<>();
-		consumerProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, applicationConfig.getKafkaHost());
-		consumerProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
-		consumerProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
-		consumerProps.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, StringDeserializer.class.getName());
-		consumerProps.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JsonDeserializer.class.getName());
-		consumerProps.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
-		consumerProps.put(JsonDeserializer.VALUE_DEFAULT_TYPE, TaskCreateEvent.class.getName());
-
-		ConsumerFactory<String, String> consumerFactory = new DefaultKafkaConsumerFactory<>(consumerProps);
-
-		ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
-		factory.setConsumerFactory(consumerFactory);
-		factory.getContainerProperties().setGroupId("console-consumer-" + System.currentTimeMillis());
-		factory.setConcurrency(3);
-		return factory;
+		return createFactory(TaskCreateEvent.class.getName());
 	}
 	@Bean
 	public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaAddUserToTaskEventListenerContainerFactory() {
-		Map<String, Object> consumerProps = new HashMap<>();
-		consumerProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, applicationConfig.getKafkaHost());
-		consumerProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
-		consumerProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
-		consumerProps.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, StringDeserializer.class.getName());
-		consumerProps.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JsonDeserializer.class.getName());
-		consumerProps.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
-		consumerProps.put(JsonDeserializer.VALUE_DEFAULT_TYPE, UserAddToTaskEvent.class.getName());
-
-		ConsumerFactory<String, String> consumerFactory = new DefaultKafkaConsumerFactory<>(consumerProps);
-
-		ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
-		factory.setConsumerFactory(consumerFactory);
-		factory.getContainerProperties().setGroupId("console-consumer-" + System.currentTimeMillis());
-		factory.setConcurrency(3);
-		return factory;
+		return createFactory(UserAddToTaskEvent.class.getName());
 	}
 	@Bean
 	public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaDeleteTaskEventListenerContainerFactory() {
-		Map<String, Object> consumerProps = new HashMap<>();
-		consumerProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, applicationConfig.getKafkaHost());
-		consumerProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
-		consumerProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
-		consumerProps.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, StringDeserializer.class.getName());
-		consumerProps.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JsonDeserializer.class.getName());
-		consumerProps.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
-		consumerProps.put(JsonDeserializer.VALUE_DEFAULT_TYPE, TaskDeleteEvent.class.getName());
-
-		ConsumerFactory<String, String> consumerFactory = new DefaultKafkaConsumerFactory<>(consumerProps);
-
-		ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
-		factory.setConsumerFactory(consumerFactory);
-		factory.getContainerProperties().setGroupId("console-consumer-" + System.currentTimeMillis());
-		factory.setConcurrency(3);
-		return factory;
+		return createFactory(TaskDeleteEvent.class.getName());
 	}
 	@Bean
 	public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaProjectDeleteEventListenerContainerFactory() {
-		Map<String, Object> consumerProps = new HashMap<>();
-		consumerProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, applicationConfig.getKafkaHost());
-		consumerProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
-		consumerProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
-		consumerProps.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, StringDeserializer.class.getName());
-		consumerProps.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JsonDeserializer.class.getName());
-		consumerProps.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
-		consumerProps.put(JsonDeserializer.VALUE_DEFAULT_TYPE, ProjectDeleteEvent.class.getName());
-
-		ConsumerFactory<String, String> consumerFactory = new DefaultKafkaConsumerFactory<>(consumerProps);
-
-		ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
-		factory.setConsumerFactory(consumerFactory);
-		factory.getContainerProperties().setGroupId("console-consumer-" + System.currentTimeMillis());
-		factory.setConcurrency(3);
-		return factory;
+		return createFactory(ProjectDeleteEvent.class.getName());
 	}
 	@Bean
 	public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaProjectUpdateEventListenerContainerFactory() {
-		Map<String, Object> consumerProps = new HashMap<>();
-		consumerProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, applicationConfig.getKafkaHost());
-		consumerProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
-		consumerProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
-		consumerProps.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, StringDeserializer.class.getName());
-		consumerProps.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JsonDeserializer.class.getName());
-		consumerProps.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
-		consumerProps.put(JsonDeserializer.VALUE_DEFAULT_TYPE, ProjectUpdateEvent.class.getName());
-
-		ConsumerFactory<String, String> consumerFactory = new DefaultKafkaConsumerFactory<>(consumerProps);
-
-		ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
-		factory.setConsumerFactory(consumerFactory);
-		factory.getContainerProperties().setGroupId("console-consumer-" + System.currentTimeMillis());
-		factory.setConcurrency(3);
-		return factory;
+		return createFactory(ProjectUpdateEvent.class.getName());
 	}
 	@Bean
 	public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaTaskUpdateEventListenerContainerFactory() {
-		Map<String, Object> consumerProps = new HashMap<>();
-		consumerProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, applicationConfig.getKafkaHost());
-		consumerProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
-		consumerProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
-		consumerProps.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, StringDeserializer.class.getName());
-		consumerProps.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JsonDeserializer.class.getName());
-		consumerProps.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
-		consumerProps.put(JsonDeserializer.VALUE_DEFAULT_TYPE, TaskUpdateEvent.class.getName());
-
-		ConsumerFactory<String, String> consumerFactory = new DefaultKafkaConsumerFactory<>(consumerProps);
-
-		ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
-		factory.setConsumerFactory(consumerFactory);
-		factory.getContainerProperties().setGroupId("console-consumer-" + System.currentTimeMillis());
-		factory.setConcurrency(3);
-		return factory;
+		return createFactory(TaskUpdateEvent.class.getName());
+	}
+	@Bean
+	public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaIsExistProjectByMemberAddToProjectEventListenerContainerFactory() {
+		return createFactory(IsExistProjectByMemberAddToProjectEvent.class.getName());
 	}
 	@Bean
     public KafkaAdmin kafkaAdmin() {

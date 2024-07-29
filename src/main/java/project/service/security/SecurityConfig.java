@@ -1,4 +1,4 @@
-package project.service.global.config;
+package project.service.security;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

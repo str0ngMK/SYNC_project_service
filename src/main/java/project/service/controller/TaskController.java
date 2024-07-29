@@ -25,5 +25,9 @@ public class TaskController {
     public ResponseMessage getUserFromTask(@RequestParam Long taskId) {
         return taskService.getUserIdsFromTask(taskId);
     }
-
+    //jwtTEST
+    @GetMapping("/user/api/test")
+    public void projectAPITest() {
+        log.info("projectAPITest");
+    }
 }

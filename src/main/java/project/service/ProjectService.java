@@ -36,9 +36,9 @@ public class ProjectService {
 		try {
 			Project project = projectRepository.findById(projectId).orElseThrow(() -> new EntityNotFoundException(String.valueOf(projectId)));
 
-			return new ResponseMessage("프로젝트 조회 성공", true, project.getId());
+			return new ResponseMessage("프로젝트 조회 성공", true, "");
 		} catch (EntityNotFoundException e) {
-			return new ResponseMessage("해당 프로젝트는 존재하지 않습니다.", false, e.getMessage());
+			return new ResponseMessage("해당 프로젝트는 존재하지 않습니다.", false, projectId);
 		}
 	}
 	@Transactional(rollbackFor = { Exception.class })

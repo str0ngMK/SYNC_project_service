@@ -15,10 +15,10 @@ import java.util.List;
 @Slf4j
 public class ProjectController {
     final ProjectService projectService;
-    @PostMapping("/project/api/v1/find")
-    public ResponseMessage findProject(Long projectId)  {
-        return projectService.findProject(projectId);
-    }
+//    @PostMapping("/project/api/v1/find")
+//    public ResponseMessage findProject(Long projectId)  {
+//        return projectService.findProject(projectId);
+//    }
 //    @PostMapping("/project/api/v1/get")
 //    public List<GetProjectsResponseDto> getProjects(@RequestBody GetProjectsRequestDto getProjectsRequestDto)  {
 //        return projectService.getProjects(getProjectsRequestDto);
