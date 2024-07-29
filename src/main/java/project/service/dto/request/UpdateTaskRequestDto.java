@@ -14,7 +14,6 @@ public class UpdateTaskRequestDto {
     private Date startDate;
     private int status;
     private String title;
-    private Optional<Long> parentTaskId;
     private Long projectId;
     private Long taskId;
 }

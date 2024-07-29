@@ -19,7 +19,7 @@ public enum ErrorCode {
 
     // User 예시
     USERID_DUPLICATE(400, "U001", "UserId is duplicated"),
-    SOCIAL_EMAIL_EXIST(400400, "U002", "Email has already been used in social register"),
+    SOCIAL_EMAIL_EXIST(400, "U002", "Email has already been used in social register"),
     USER_FAILED_AUTHORIZATION(401, "U003", "This user is not authorized."),
     USER_FAILED_AUTHENTICATION(400, "U004", "Invalid password for this user."),
     USER_NOT_FOUND(400, "U005", "해당 유저는 존재하지 않습니다."),

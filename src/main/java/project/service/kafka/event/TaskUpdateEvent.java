@@ -1,10 +1,10 @@
 package project.service.kafka.event;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import project.service.dto.request.UpdateTaskRequestDto;
 
-@AllArgsConstructor
+@Setter
 @Getter
 public class TaskUpdateEvent {
     UpdateTaskRequestDto updateTaskRequestDto;
