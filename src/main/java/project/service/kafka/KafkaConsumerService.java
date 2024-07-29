@@ -8,6 +8,7 @@ import project.service.TaskService;
 import project.service.dto.request.CreateProjectRequestDto;
 import project.service.dto.request.CreateTaskRequestDto;
 import project.service.entity.Project;
+import project.service.global.ResponseMessage;
 import project.service.kafka.event.*;
 
 
@@ -25,6 +26,7 @@ public class KafkaConsumerService {
     private static final String TOPIC4 = "project-delete-topic";
     private static final String TOPIC5 = "project-update-topic";
     private static final String TOPIC6 = "task-update-topic";
+    private static final String TOPIC7 = "is-exist-project-by-member-add-to-project-topic";
     @KafkaListener(topics = TOPIC, groupId = "project_create_group", containerFactory = "kafkaProjectCreateEventListenerContainerFactory")
     public void listenProjectCreateEvent(ProjectCreateEvent event) {
         try {
@@ -104,6 +106,20 @@ public class KafkaConsumerService {
             taskService.updateTask(event);
             // 처리 로그 출력
             log.info("Processed taskUpdateEvent");
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+    }
+    @KafkaListener(topics = TOPIC7, groupId = "is-exist-project-by-member-add-to-project-group", containerFactory = "kafkaIsExistProjectByMemberAddToProjectEventListenerContainerFactory")
+    public void listenIsExistProjectByMemberAddToProjectEventEvent(IsExistProjectByMemberAddToProjectEvent event) {
+        try {
+            // 이벤트 처리
+            ResponseMessage responseMessage = projectService.findProject(event.getProjectId());
+            if (!responseMessage.isResult()) {
+                kafkaProducerService.sendRollbackMemberAddToProjectEvent(event.getProjectId(), event.getUserIds());
+            }
+            // 처리 로그 출력
+            log.info("Processed IsExistProjectByMemberAddToProjectEvent");
         } catch (Exception e) {
             log.error(e.getMessage());
         }
