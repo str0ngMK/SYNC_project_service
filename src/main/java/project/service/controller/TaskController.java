@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import project.service.TaskService;
 import project.service.dto.request.GetMemberFromTaskRequestDto;
+import project.service.dto.request.GetTaskRequestDto;
 import project.service.global.ResponseMessage;
 
 @RestController
@@ -17,8 +18,8 @@ import project.service.global.ResponseMessage;
 public class TaskController {
     private final TaskService taskService;
     @GetMapping("project/tasks/api/v1/getChildren")
-    public ResponseMessage getOnlyChildrenTasks(Long taskId)  {
-        return taskService.getOnlyChildrenTasks(taskId);
+    public ResponseMessage getOnlyChildrenTasks(GetTaskRequestDto getTaskRequestDto)  {
+        return taskService.getOnlyChildrenTasks(getTaskRequestDto.getTaskId());
     }
     @GetMapping("/project/task/api/v1/users")
     public ResponseMessage getUserFromTask(@RequestParam Long taskId) {

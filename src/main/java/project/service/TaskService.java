@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.service.dto.request.CreateTaskRequestDto;
 import project.service.dto.request.UpdateProjectRequestDto;
+import project.service.dto.request.UpdateTaskRequestDto;
 import project.service.dto.response.GetMemberFromTaskResponseDto;
 import project.service.dto.response.GetTaskResponseDto;
 import project.service.entity.Project;
@@ -101,7 +102,15 @@ public class TaskService {
     }
 
     public void updateTask(TaskUpdateEvent event) {
-
+        UpdateTaskRequestDto updateTaskRequestDto = event.getUpdateTaskRequestDto();
+        Optional<Task> task = taskRepository.findById(updateTaskRequestDto.getTaskId());
+        //task id 존재하지 않는경우 예외처리 해야함 (추가)
+        task.get().setTitle(updateTaskRequestDto.getTitle());
+        task.get().setDescription(updateTaskRequestDto.getDescription());
+        task.get().setStartDate(updateTaskRequestDto.getStartDate());
+        task.get().setEndDate(updateTaskRequestDto.getEndDate());
+        task.get().setStatus(updateTaskRequestDto.getStatus());
+        taskRepository.save(task.get());
     }
 
     public ResponseMessage getUserIdsFromTask(Long taskId) {
